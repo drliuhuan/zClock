@@ -1,0 +1,20 @@
+name: Build and checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: NuGet/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
+      - name: Restore
+        run: nuget restore zClock.sln -NonInteractive
+      - name: Build
+        shell: powershell
+        run: .\build.ps1
+      - name: Checks without PowerPoint
+        shell: powershell
+        run: .\tests\Run-Checks.ps1
